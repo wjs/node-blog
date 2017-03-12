@@ -47,7 +47,6 @@
         this.$http.get('/api/posts')
         .then(res => res.body)
         .then(res => {
-          console.log(res)
           this.posts = res.data
         })
       },
