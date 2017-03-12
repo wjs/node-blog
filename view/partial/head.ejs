@@ -1,0 +1,13 @@
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <title><%= pageTitle %></title>
+  <meta name="keywords" content="node blog">
+  <meta name="description" content="node blog">
+  <% if (staticUrl['admin.css']) {%>
+  <link rel="stylesheet" href="/static/<%= staticUrl['admin.css'] %>">
+  <% } %>
+  <% if (staticUrl['app.css']) {%>
+  <link rel="stylesheet" href="/static/<%= staticUrl['app.css'] %>">
+  <% } %>
+</head>

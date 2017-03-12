@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<% include partial/head %>
+<body>
+  <% include partial/header %>
+  <main id="main" class="list-page">
+    <div class="main-inner">
+      <ul class="post-list">
+        <% posts.forEach(function (item, index) {%>
+        <li class="post-item">
+          <span class="post-date"><%= item.createtime %></span>
+          <a href="/posts/<%= item._id %>" class="post-title">
+            <%= item.title %>
+          </a>
+        </li>
+        <% }) %>
+      </ul>
+    </div>
+  </main>
+
+  <% if (pageConfig) {%>
+  <script>window.pageConfig = <%- pageConfig %></script>
+  <% } %>
+  <% include partial/script %>
+</body>
+</html>
