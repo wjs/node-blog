@@ -1,6 +1,6 @@
 # node-blog
 
-练手项目，Node.js 写的个人博客系统，后端 Koa2 + mongodb，博客首页 jquery， 博客后台管理页 Vue + element。
+练手项目，Node.js 写的个人博客系统，后端 Koa2 + mongodb，博客首页 jQuery， 博客后台管理页 Vue + element。
 
 [Live Demo](https://wjs92.cf)
 
@@ -43,9 +43,10 @@ npm run build # 打包前端静态
 - [x] 博客后台管理功能：站点初始化，管理员登录，博客增删改查，站点和管理员信息管理
 - [ ] markdown 编辑器优化
 - [ ] 博客查找
-- [ ] 头像上传
+- [ ] 图片上传
 - [ ] 个人信息展示
 - [ ] 缓存
+- [ ] 数据备份还原
 
 ## License
 
