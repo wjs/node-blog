@@ -12,5 +12,6 @@ module.exports = {
     port: 27017,
     db: 'blog'
   },
-  staticUrl: staticManifest
+  staticUrl: staticManifest,
+  uploadImagePath: 'data/upload/images'
 }

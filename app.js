@@ -20,6 +20,7 @@ app.use(favicon('./view/favicon.ico', { maxAge: config.staticCacheMaxAge }))
 
 // static files
 app.use(mount('/static', serve('./static/dist', { maxAge: config.staticCacheMaxAge })))
+app.use(mount('/static', serve(config.uploadImagePath, { maxAge: config.staticCacheMaxAge })))
 
 // bodyparser
 app.use(bodyParser())

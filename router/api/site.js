@@ -21,7 +21,6 @@ site
   }, ctx.request.body)
   // encry password
   delete site._id
-  console.log(site)
 
   ctx.body = await siteService.update(ctx.mongo, ctx.params.id, site)
 })

@@ -2,5 +2,5 @@
 .vscode
 node_modules
 npm-debug.log
-zip
 config/index.js
+data
