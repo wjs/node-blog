@@ -46,6 +46,7 @@
     "jquery": "^3.1.1",
     "less": "^2.7.2",
     "less-loader": "^2.2.3",
+    "lodash-es": "^4.17.4",
     "nodemon": "^1.11.0",
     "normalize.css": "^5.0.0",
     "progress-bar-webpack-plugin": "^1.9.3",

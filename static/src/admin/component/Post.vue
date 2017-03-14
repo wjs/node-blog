@@ -4,16 +4,25 @@
       <el-input type="text" placeholder="Title" v-model="post.title"></el-input>
       <el-upload
         class="upload-demo"
-        drag
         action="/api/posts/upload-img"
-        mutiple>
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        :multiple="false"
+        :on-success="uploadImgSuccess">
+        <el-button size="small" type="primary">点击上传</el-button>
         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
     </div>
-    <div class="row">
-      <el-input type="textarea" :rows="20" placeholder="Markdown content..." v-model="post.content"></el-input>
+    <div class="row flex">
+      <div class="flex1">
+        <el-input
+          type="textarea" :rows="20"
+          placeholder="Markdown content..."
+          v-model="post.content"
+          @change="contentChange">
+        </el-input>
+      </div>
+      <div class="flex1">
+        <div class="preview-md" v-html="postPreview"></div>
+      </div>
     </div>
     <div class="row">
       <el-button type="primary" @click="save">Save</el-button>
@@ -22,6 +31,7 @@
 </template>
 
 <script>
+  import { debounce } from 'lodash-es'
   import Vue from 'vue'
   import {
     Input,
@@ -36,7 +46,8 @@
     name: 'Post',
     data () {
       return {
-        post: {}
+        post: {},
+        postPreview: ''
       }
     },
     mounted () {
@@ -66,6 +77,19 @@
             this.$router.push({ name: 'dashboard' })
           })
         }
+      },
+      contentChange: debounce(function () {
+        this.preview()
+      }, 1000),
+      preview () {
+        this.$http.post('/api/posts/markdown/preview', { postContent: this.post.content })
+        .then(res => res.body)
+        .then(res => {
+          this.postPreview = res
+        })
+      },
+      uploadImgSuccess (res) {
+        console.log(res)
       }
     }
   }
@@ -75,6 +99,12 @@
   .post {
     .row {
       margin: 30px;
+    }
+    .flex {
+      display: flex;
+    }
+    .flex1 {
+      flex: 1;
     }
   }
 </style>
