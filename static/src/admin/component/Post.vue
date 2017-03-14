@@ -31,7 +31,9 @@
 </template>
 
 <script>
-  import { debounce } from 'lodash-es'
+  require('highlight.js/styles/atom-one-dark.css')
+  import _ from 'lodash'
+  import marked from 'marked'
   import Vue from 'vue'
   import {
     Input,
@@ -41,6 +43,13 @@
   Vue.component(Input.name, Input)
   Vue.component(Button.name, Button)
   Vue.component(Upload.name, Upload)
+
+  marked.setOptions({
+    langPrefix: 'hljs ',
+    highlight: function (code) {
+      return require('highlight.js').highlightAuto(code).value
+    }
+  })
 
   export default {
     name: 'Post',
@@ -61,6 +70,7 @@
         .then(res => res.body)
         .then(res => {
           this.post = res
+          this.preview()
         })
       },
       save () {
@@ -78,15 +88,11 @@
           })
         }
       },
-      contentChange: debounce(function () {
+      contentChange: _.debounce(function () {
         this.preview()
       }, 1000),
       preview () {
-        this.$http.post('/api/posts/markdown/preview', { postContent: this.post.content })
-        .then(res => res.body)
-        .then(res => {
-          this.postPreview = res
-        })
+        this.postPreview = marked(this.post.content)
       },
       uploadImgSuccess (res) {
         console.log(res)

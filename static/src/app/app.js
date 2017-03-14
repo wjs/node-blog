@@ -1,4 +1,5 @@
 require('normalize.css')
+require('highlight.js/styles/atom-one-dark.css')
 require('./app.less')
 const $ = require('jquery')
 

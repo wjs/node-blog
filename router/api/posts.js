@@ -4,8 +4,6 @@ const fs = require('fs')
 const path = require('path')
 const mkdirp = require('mkdirp')
 const moment = require('moment')
-const md = require('markdown-it')()
-const emoji = require('markdown-it-emoji')
 const Router = require('koa-router')
 const posts = new Router({
   prefix: '/posts'
@@ -13,8 +11,6 @@ const posts = new Router({
 const config = require('../../config')
 const utils = require('../../common/utils')
 const postService = require('../../service/posts')
-
-md.use(emoji)
 
 // 保证上传目录存在
 try {
@@ -56,10 +52,6 @@ posts
 })
 .del('/:id', utils.LoginMiddleware, async (ctx, next) => {
   ctx.body = await postService.del(ctx.mongo, ctx.params.id)
-})
-// 文章内容多，所以用 post 吧
-.post('/markdown/preview', ctx => {
-  ctx.body = md.render(ctx.request.body.postContent)
 })
 .post('/upload-img', upload.single('file'), async ctx => {
   // 这里可能会坑，multer 把结果挂到了 req 上，而不是 request

@@ -1,6 +1,6 @@
 const moment = require('moment')
-const md = require('markdown-it')()
-const emoji = require('markdown-it-emoji')
+const marked = require('marked')
+const hljs = require('highlight.js')
 const Router = require('koa-router')
 const posts = new Router({
   prefix: '/posts'
@@ -9,7 +9,12 @@ const config = require('../../config')
 const siteService = require('../../service/site')
 const postService = require('../../service/posts')
 
-md.use(emoji)
+marked.setOptions({
+  langPrefix: 'hljs ',
+  highlight: function (code) {
+    return hljs.highlightAuto(code).value
+  }
+})
 
 posts
 .get(['/', '/page/:pageIndex'], async ctx => {
@@ -70,7 +75,7 @@ posts
     return ctx.redirect('/')
   }
   if (post) {
-    post.content = md.render(post.content)
+    post.content = marked(post.content)
     post.createtime = moment(post.createtime).format('YYYY-MM-DD')
   } else {
     return ctx.redirect('/')
