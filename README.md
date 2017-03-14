@@ -19,7 +19,7 @@ npm i --production
 cp config/sample.js config/index.js
 vi config/index.js  # 修改对应配置项
 pm2 start app.js -i max
-# 推荐配合 nginx 部署
+# 推荐配合最新版 nginx 部署，开启 http2，再用 letsencrypt 实现 https
 ```
 
 首次访问，请先进入后台管理入口进行站点初始化。
@@ -45,7 +45,7 @@ npm run build # 打包前端静态
 - [ ] 博客查找
 - [ ] 图片上传
 - [ ] 个人信息展示
-- [ ] 兼容手机端
+- [x] 兼容手机端
 - [ ] 缓存
 - [ ] 数据备份还原
 

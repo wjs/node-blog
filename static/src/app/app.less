@@ -40,6 +40,12 @@ p {
   width: 100%;
   background-color: @bg-color;
   box-shadow: 0px 1px 3px 0 rgba(0,0,0,0.25);
+  transition: transform .3s ease-out;
+
+  &.hide {
+    transform: translate(0, -100%);
+    transition: transform .3s ease-in;
+  }
 }
 #main {
   padding: 110px 0 50px;
@@ -184,5 +190,19 @@ p {
     p {
       margin: 1.5em 0;
     }
+  }
+}
+
+
+@media (max-width: 640px) {
+  .header-inner,
+  .main-inner {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+  }
+  .site-nav {
+    display: none;
   }
 }

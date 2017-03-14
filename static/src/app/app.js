@@ -3,12 +3,13 @@ require('highlight.js/styles/atom-one-dark.css')
 require('./app.less')
 const $ = require('jquery')
 
-$(function() {
+$(function () {
+  // 列表页 分页
   if (pageConfig && pageConfig.pageIndex) {
     $.ajax({
       method: 'get',
       url: '/posts/pagination',
-      success: function(res) {
+      success: function (res) {
         if (res) {
           const totalPage = Math.ceil(res.total / res.pageSize)
           // 如果手动输入 url 并且大于 totalPage 的话
@@ -41,4 +42,34 @@ $(function() {
       }
     })
   }
+
+  // 滚动 显示隐藏导航栏
+  let lastScrollTop = 0
+  $(window).scroll(debounce(function (event) {
+    let st = $(this).scrollTop()
+    if (st > lastScrollTop) {
+      // downscroll code
+      $('#header').addClass('hide')
+    } else {
+      // upscroll code
+      $('#header').removeClass('hide')
+    }
+    lastScrollTop = st
+  }, 100))
 })
+
+function debounce(func, wait, immediate) {
+  var timeout
+  return function () {
+    var context = this,
+      args = arguments
+    var later = function () {
+      timeout = null
+      if (!immediate) func.apply(context, args)
+    }
+    var callNow = immediate && !timeout
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    if (callNow) func.apply(context, args)
+  }
+}
