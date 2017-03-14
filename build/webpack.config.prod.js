@@ -23,8 +23,7 @@ config.plugins = config.plugins.concat([
       comments: false
     },
     sourceMap: false
-  }),
-  new webpack.optimize.OccurrenceOrderPlugin()
+  })
 ])
 
 module.exports = config

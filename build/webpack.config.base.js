@@ -2,16 +2,21 @@ const webpack = require('webpack')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin')
+const WebpackChunkHash = require('webpack-chunk-hash')
 const CleanPlugin = require('clean-webpack-plugin')
 
 module.exports = {
   entry: {
     app: './static/src/app/app.js',
-    admin: [
-      'normalize.css',
+    vendor: [
       'vue',
       'vue-router',
       'vue-resource',
+      'marked',
+      'highlight.js'
+    ],
+    admin: [
+      'normalize.css',
       './static/src/admin/admin.js'
     ]
   },
@@ -32,7 +37,14 @@ module.exports = {
     new ExtractTextPlugin({
       filename: '[name].[chunkhash].css'
     }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      chunks: ['vendor', 'admin'],
+      minChunks: Infinity
+    }),
     new ManifestPlugin(),
+    new webpack.HashedModuleIdsPlugin(),
+    new WebpackChunkHash(),
     new CleanPlugin(['static/dist'], { root: `${process.cwd()}` })
   ],
   module: {

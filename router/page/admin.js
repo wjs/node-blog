@@ -45,6 +45,7 @@ admin
     pageTitle: site.sitename,
     staticUrl: {
       'admin.css': config.staticUrl['admin.css'],
+      'vendor.js': config.staticUrl['vendor.js'],
       'admin.js': config.staticUrl['admin.js']
     }
   })
@@ -64,6 +65,7 @@ admin
       pageTitle: site.sitename,
       staticUrl: {
         'admin.css': config.staticUrl['admin.css'],
+        'vendor.js': config.staticUrl['vendor.js'],
         'admin.js': config.staticUrl['admin.js']
       }
     })
@@ -95,6 +97,7 @@ admin
     pageTitle: site.sitename,
     staticUrl: {
       'admin.css': config.staticUrl['admin.css'],
+      'vendor.js': config.staticUrl['vendor.js'],
       'admin.js': config.staticUrl['admin.js']
     }
   })

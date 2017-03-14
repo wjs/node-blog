@@ -1,8 +1,9 @@
 {
-  "admin.css": "admin.3a74b396305d95ce0ca2.css",
-  "admin.js": "admin.3a74b396305d95ce0ca2.js",
-  "app.css": "app.435c8909adc853ab76b7.css",
-  "app.js": "app.435c8909adc853ab76b7.js",
+  "admin.css": "admin.b5b3135b1a4dad0ab71b.css",
+  "admin.js": "admin.b5b3135b1a4dad0ab71b.js",
+  "app.css": "app.ef9be7de897178542619.css",
+  "app.js": "app.ef9be7de897178542619.js",
   "element-icons.ttf?t=1472440741": "element-icons.ttf?b02bdc1b846fd65473922f5f62832108",
-  "element-icons.woff?t=1472440741": "element-icons.woff?d2f69a92faa6fe990d2e613c358be705"
+  "element-icons.woff?t=1472440741": "element-icons.woff?d2f69a92faa6fe990d2e613c358be705",
+  "vendor.js": "vendor.592b53a5dd05310d99dd.js"
 }

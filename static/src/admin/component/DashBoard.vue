@@ -8,7 +8,7 @@
     </h1>
 
     <div class="post-item" v-for="(item, index) in posts">
-      <div class="title">{{item.title}}</div>
+      <div class="title"><a :href="`/posts/${item._id}`" target="_blank">{{item.title}}</a></div>
       <div class="operate">
         <router-link :to="{ name: 'edit-post', params: { id: item._id } }">
           <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
@@ -79,6 +79,14 @@
       flex: 1;
       font-size: 1.2em;
       line-height: 1.8;
+
+      a {
+        text-decoration: none;
+        color: #333;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
     .operate {
       width: 200px;
