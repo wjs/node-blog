@@ -95,7 +95,9 @@
         this.postPreview = marked(this.post.content)
       },
       uploadImgSuccess (res) {
-        console.log(res)
+        // 把返回的图片 url 直接插到 markdown 中
+        // 默认加到后面，想放在其他地方需要手动移，后面查一下 textarea 光标位置
+        this.post.content += `![test img](${res})`
       }
     }
   }

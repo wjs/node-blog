@@ -1,7 +1,7 @@
 const mongo = require('koa-mongo')
 const mount = require('koa-mount')
 const serve = require('koa-static')
-const send = require('koa-send')
+const path = require('path')
 const views = require('koa-views')
 const favicon = require('koa-favicon')
 const bodyParser = require('koa-bodyparser')
@@ -20,7 +20,7 @@ app.use(favicon('./view/favicon.ico', { maxAge: config.staticCacheMaxAge }))
 
 // static files
 app.use(mount('/static', serve('./static/dist', { maxAge: config.staticCacheMaxAge })))
-app.use(mount('/static', serve(config.uploadImagePath, { maxAge: config.staticCacheMaxAge })))
+app.use(mount('/static', serve(path.resolve(config.uploadImagePath), { maxAge: config.staticCacheMaxAge })))
 
 // bodyparser
 app.use(bodyParser())
