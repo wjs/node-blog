@@ -2,7 +2,7 @@
   <div class="dashboard">
     <h1>
       博客管理页面!
-      <router-link :to="{ name: 'add-post' }" style="float: right; margin-right: 70px;">
+      <router-link :to="{ name: 'add-post' }" style="float: right;">
         <el-button type="success" size="small">新增博客<i class="el-icon-edit el-icon--right"></i></el-button>
       </router-link>
     </h1>
@@ -51,7 +51,7 @@
         })
       },
       del (item, index) {
-        if (confirm(`Are you really want to delete this post: ${item.title}?`)) {
+        if (confirm(`确认要删除改博客？: ${item.title}?`)) {
           this.$http.delete(`/api/posts/${item._id}`)
           .then(res => res.body)
           .then(res => {
@@ -66,7 +66,7 @@
 <style lang="less">
   .post-item {
     display: flex;
-    padding: 10px 20px 10px 0;
+    padding: 10px 0;
     border-bottom: 1px solid #f2f2f2;
     transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
@@ -89,11 +89,10 @@
       }
     }
     .operate {
-      width: 200px;
       text-align: center;
 
       button {
-        margin-right: 20px;
+        margin-left: 20px;
       }
     }
   }

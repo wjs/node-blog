@@ -57,7 +57,7 @@
     }
     .right {
       flex: 1;
-      padding-left: 30px;
+      padding: 0 30px;
     }
   }
   .left-nav {
