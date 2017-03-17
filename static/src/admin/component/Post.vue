@@ -126,7 +126,7 @@
       margin: 20px 0;
     }
     .editor {
-      height: ~"calc(100% - 112px)";
+      height: ~"calc(100% - 120px)";
       border: 1px solid #bfcbd9;
       border-radius: 5px;
     }

@@ -1,60 +1,64 @@
 require('normalize.css')
 require('highlight.js/styles/atom-one-dark.css')
 require('./app.less')
-const $ = require('jquery')
 
-$(function () {
+document.addEventListener("DOMContentLoaded", function (event) {
   // 列表页 分页
   if (pageConfig && pageConfig.pageIndex) {
-    $.ajax({
-      method: 'get',
-      url: '/posts/pagination',
-      success: function (res) {
-        if (res) {
-          const totalPage = Math.ceil(res.total / res.pageSize)
-          // 如果手动输入 url 并且大于 totalPage 的话
-          if (pageConfig.pageIndex > totalPage && totalPage > 1) {
-            window.location.href = '/posts/page/' + totalPage
-          } else if (totalPage === 1) {
-            return
-          }
+    const r = new XMLHttpRequest()
+    r.open('GET', '/posts/pagination', true)
+    r.onreadystatechange = function () {
+      if (r.readyState != 4 || r.status != 200) {
+        return
+      }
+      const res = JSON.parse(r.responseText)
+      const totalPage = Math.ceil(res.total / res.pageSize)
+      // 如果手动输入 url 并且大于 totalPage 的话
+      if (pageConfig.pageIndex > totalPage && totalPage > 1) {
+        window.location.href = '/posts/page/' + totalPage
+      } else if (totalPage === 1) {
+        return
+      }
 
-
-          let pagination = '<div class="pagination">'
-          // prev
-          if (pageConfig.pageIndex > 1) {
-            pagination += `<a class="page-num prev" href="/posts/page/${pageConfig.pageIndex - 1}" title="上一页"></a>`
-          }
-          for (let i = 1; i < totalPage + 1; i++) {
-            if (i === pageConfig.pageIndex) {
-              pagination += `<span class="page-num current">${i}</span>`
-            } else {
-              pagination += `<a class="page-num" href="/posts/page/${i}">${i}</a>`
-            }
-          }
-          // next
-          if (pageConfig.pageIndex < totalPage) {
-            pagination += `<a class="page-num next" href="/posts/page/${pageConfig.pageIndex + 1}" title="下一页"></a>`
-          }
-          pagination += '</div>'
-          $('.main-inner').append(pagination)
+      // 准备分页 dom
+      let htmlStr = ''
+      // prev
+      if (pageConfig.pageIndex > 1) {
+        htmlStr += `<a class="page-num prev" href="/posts/page/${pageConfig.pageIndex - 1}" title="上一页"></a>`
+      }
+      for (let i = 1; i < totalPage + 1; i++) {
+        if (i === pageConfig.pageIndex) {
+          htmlStr += `<span class="page-num current">${i}</span>`
+        } else {
+          htmlStr += `<a class="page-num" href="/posts/page/${i}">${i}</a>`
         }
       }
-    })
+      // next
+      if (pageConfig.pageIndex < totalPage) {
+        htmlStr += `<a class="page-num next" href="/posts/page/${pageConfig.pageIndex + 1}" title="下一页"></a>`
+      }
+
+      const paginationBox = document.createElement('div')
+      paginationBox.classList.add('pagination')
+      paginationBox.innerHTML = htmlStr
+      document.getElementsByClassName('main-inner')[0].appendChild(paginationBox)
+    };
+    r.send()
   }
 
   // 滚动 显示隐藏导航栏
-  let lastScrollTop = 0
-  $(window).scroll(debounce(function (event) {
-    let st = $(this).scrollTop()
-    if (st > lastScrollTop) {
+  let lastScrollPosition = 0
+  window.addEventListener('scroll', debounce(function (e) {
+    const sp = window.scrollY
+    const headerDom = document.getElementById('header')
+    if (sp > lastScrollPosition) {
       // downscroll code
-      $('#header').addClass('hide')
+      headerDom.classList.add('hide')
     } else {
       // upscroll code
-      $('#header').removeClass('hide')
+      headerDom.classList.remove('hide')
     }
-    lastScrollTop = st
+    lastScrollPosition = sp
   }, 100))
 })
 

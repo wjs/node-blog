@@ -68,7 +68,14 @@ module.exports = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: 'css-loader?minimize'
+          use: `css-loader?${
+            JSON.stringify({
+              minimize: true,
+              discardComments: {
+                removeAll: true
+              }
+            })
+          }`
         })
       },
       {

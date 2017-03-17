@@ -42,7 +42,6 @@
     "element-ui": "^1.2.3",
     "extract-text-webpack-plugin": "^2.0.0",
     "file-loader": "^0.10.1",
-    "jquery": "^3.1.1",
     "less": "^2.7.2",
     "less-loader": "^2.2.3",
     "nodemon": "^1.11.0",
