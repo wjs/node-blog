@@ -17,6 +17,7 @@ admin
   // sitename, admin, password, github
   const newSite = Object.assign({
     sitename: 'node-blog',
+    pagesize: 10,
     admin: 'admin',
     password: 'admin',
     github: ''

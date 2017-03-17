@@ -4,7 +4,7 @@ require('./app.less')
 
 document.addEventListener("DOMContentLoaded", function (event) {
   // 列表页 分页
-  if (pageConfig && pageConfig.pageIndex) {
+  if (pageConfig && pageConfig.pageIndex && pageConfig.pageSize) {
     const r = new XMLHttpRequest()
     r.open('GET', '/posts/pagination', true)
     r.onreadystatechange = function () {
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         return
       }
       const res = JSON.parse(r.responseText)
-      const totalPage = Math.ceil(res.total / res.pageSize)
+      const totalPage = Math.ceil(res.total / pageConfig.pageSize)
       // 如果手动输入 url 并且大于 totalPage 的话
       if (pageConfig.pageIndex > totalPage && totalPage > 1) {
         window.location.href = '/posts/page/' + totalPage

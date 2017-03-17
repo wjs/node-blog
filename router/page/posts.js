@@ -35,7 +35,8 @@ posts
   }
   const posts = await postService.getList(ctx.mongo, {
     public: true,
-    pageIndex: currentPage
+    pageIndex: currentPage,
+    pageSize: site.pagesize || 10
   })
   posts.data.forEach(item => {
     item.createtime = moment(item.createtime).format('YYYY-MM-DD')
@@ -44,10 +45,12 @@ posts
     posts: posts.data,
     site: {
       sitename: site.sitename,
+      pagesize: site.pagesize,
       admin: site.admin,
       github: site.github
     },
     pageConfig: JSON.stringify({
+      pageSize: site.pagesize || 10,
       pageIndex: currentPage
     }),
     pageTitle: site.sitename,
@@ -60,7 +63,6 @@ posts
 // 因为路由长得一样，所以得在 /:id 的前面定义
 .get('/pagination', async ctx => {
   ctx.body = {
-    pageSize: config.pageSize,
     total: await postService.getTotalCount(ctx.mongo, { public: true })
   }
 })

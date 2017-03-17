@@ -5,13 +5,15 @@ const collectionName = 'posts'
 const posts = {
   // get posts list
   async getList (mongoClient, filter) {
-    const pageIndex = filter.pageIndex
+    const pageIndex = filter.pageIndex || 1
+    const pageSize = filter.pageSize || 10
     delete filter.pageIndex
+    delete filter.pageSize
     const cursor = await mongoClient.db(config.mongodb.db).collection(collectionName)
     .find(filter, { title: true, createtime: true })
     .sort({ createtime: -1 })
-    .skip((pageIndex - 1) * config.pageSize)
-    .limit(config.pageSize)
+    .skip((pageIndex - 1) * pageSize)
+    .limit(pageSize)
 
     return await {
       hasNext: await cursor.hasNext(),

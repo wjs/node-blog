@@ -31,11 +31,16 @@ const upload = multer({
 posts
 .get('/', async (ctx, next) => {
   let pageIndex = 1
+  let pageSize = 10
   if (ctx.query.pageIndex) {
     pageIndex = parseInt(ctx.query.pageIndex)
   }
+  if (ctx.query.pageSize) {
+    pageSize = parseInt(ctx.query.pageSize)
+  }
   ctx.body =  await postService.getList(ctx.mongo, {
-    pageIndex
+    pageIndex,
+    pageSize
   })
 })
 .post('/', utils.LoginMiddleware, async (ctx, next) => {
@@ -49,7 +54,6 @@ posts
 })
 .get('/pagination', async ctx => {
   ctx.body = {
-    pageSize: config.pageSize,
     total: await postService.getTotalCount(ctx.mongo)
   }
 })

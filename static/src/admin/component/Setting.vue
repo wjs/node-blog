@@ -6,6 +6,10 @@
       <el-input type="text" placeholder="站点名称" v-model="site.sitename"></el-input>
     </div>
     <div class="row">
+      <label>每页显示条数</label>
+      <el-input-number v-model="site.pagesize" :min="1" :max="20"></el-input-number>
+    </div>
+    <div class="row">
       <label>管理员</label>
       <el-input type="text" placeholder="管理员" v-model="site.admin"></el-input>
     </div>
@@ -25,10 +29,12 @@
   import Vue from 'vue'
   import {
     Input,
+    InputNumber,
     Button,
     Message
   } from 'element-ui'
   Vue.component(Input.name, Input)
+  Vue.component(InputNumber.name, InputNumber)
   Vue.component(Button.name, Button)
 
   export default {
@@ -51,9 +57,10 @@
         })
       },
       updateSite () {
-        const { sitename, admin, github } = this.site
+        const { sitename, pagesize, admin, github } = this.site
         const params = {
           sitename,
+          pagesize,
           admin,
           github
         }

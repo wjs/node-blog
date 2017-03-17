@@ -47,7 +47,10 @@
     data () {
       return {
         posts: [],
-        pagination: {}
+        pagination: {
+          currentPage: 1,
+          pageSize: 2
+        }
       }
     },
     mounted () {
@@ -56,8 +59,12 @@
     },
     methods: {
       getList (filter) {
+        const params = {
+          pageIndex: this.pagination.currentPage,
+          pageSize: this.pagination.pageSize
+        }
         this.$http.get('/api/posts', {
-          params: Object.assign({}, filter)
+          params: params
         })
         .then(res => res.body)
         .then(res => {
@@ -68,12 +75,12 @@
         this.$http.get('/api/posts/pagination')
         .then(res => res.body)
         .then(res => {
-          this.pagination = Object.assign({ currentPage: 1 }, res)
+          this.pagination = Object.assign({}, this.pagination, res)
         })
       },
       pageChange (newPage) {
         this.pagination.currentPage = newPage
-        this.getList({ pageIndex: newPage})
+        this.getList()
       },
       del (item, index) {
         if (confirm(`确认要删除改博客？: ${item.title}?`)) {

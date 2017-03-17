@@ -16,6 +16,7 @@ site
   // sitename, admin, password, github
   const site = Object.assign({
     sitename: 'node-blog',
+    pagesize: 10,
     admin: 'admin',
     github: ''
   }, ctx.request.body)
