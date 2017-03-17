@@ -62,10 +62,7 @@
         this.$http.put(`/api/site/${this.site._id}`, params)
         .then(res => res.body)
         .then(res => {
-          Message({
-            message: '保存成功！',
-            type: 'success'
-          })
+          Message({ message: '保存成功！', type: 'success'})
         })
         .finally(() => {
           this.loading = false

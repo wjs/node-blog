@@ -20,6 +20,14 @@
         </el-tooltip>
       </div>
     </div>
+
+    <el-pagination
+      layout="prev, pager, next"
+      :page-size="pagination.pageSize"
+      :total="pagination.total"
+      :current-page="pagination.currentPage"
+      @current-change="pageChange">
+    </el-pagination>
   </div>
 </template>
 
@@ -27,28 +35,45 @@
   import Vue from 'vue'
   import {
     Button,
-    Tooltip
+    Tooltip,
+    Pagination
   } from 'element-ui'
   Vue.component(Button.name, Button)
   Vue.component(Tooltip.name, Tooltip)
+  Vue.component(Pagination.name, Pagination)
 
   export default {
     name: 'DashBoard',
     data () {
       return {
-        posts: []
+        posts: [],
+        pagination: {}
       }
     },
     mounted () {
       this.getList()
+      this.getPagination()
     },
     methods: {
-      getList () {
-        this.$http.get('/api/posts')
+      getList (filter) {
+        this.$http.get('/api/posts', {
+          params: Object.assign({}, filter)
+        })
         .then(res => res.body)
         .then(res => {
           this.posts = res.data
         })
+      },
+      getPagination () {
+        this.$http.get('/api/posts/pagination')
+        .then(res => res.body)
+        .then(res => {
+          this.pagination = Object.assign({ currentPage: 1 }, res)
+        })
+      },
+      pageChange (newPage) {
+        this.pagination.currentPage = newPage
+        this.getList({ pageIndex: newPage})
       },
       del (item, index) {
         if (confirm(`确认要删除改博客？: ${item.title}?`)) {

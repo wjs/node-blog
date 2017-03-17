@@ -5,10 +5,12 @@ const collectionName = 'posts'
 const posts = {
   // get posts list
   async getList (mongoClient, filter) {
+    const pageIndex = filter.pageIndex
+    delete filter.pageIndex
     const cursor = await mongoClient.db(config.mongodb.db).collection(collectionName)
-    .find({}, { title: true, createtime: true })
+    .find(filter, { title: true, createtime: true })
     .sort({ createtime: -1 })
-    .skip((filter.pageIndex - 1) * config.pageSize)
+    .skip((pageIndex - 1) * config.pageSize)
     .limit(config.pageSize)
 
     return await {
@@ -16,9 +18,9 @@ const posts = {
       data: await cursor.toArray()
     }
   },
-  async getTotalCount (mongoClient) {
+  async getTotalCount (mongoClient, filter) {
     return await mongoClient.db(config.mongodb.db).collection(collectionName)
-    .find()
+    .find(filter)
     .count()
   },
   // add a post

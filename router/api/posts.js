@@ -30,23 +30,37 @@ const upload = multer({
 
 posts
 .get('/', async (ctx, next) => {
+  let pageIndex = 1
+  if (ctx.query.pageIndex) {
+    pageIndex = parseInt(ctx.query.pageIndex)
+  }
   ctx.body =  await postService.getList(ctx.mongo, {
-    pageIndex: ctx.query.pageIndex || 1
+    pageIndex
   })
 })
 .post('/', utils.LoginMiddleware, async (ctx, next) => {
   const post = Object.assign({
+    public: false,
     createtime: Date.now(),
     updatetime: Date.now()
   }, ctx.request.body)
   const result = await postService.add(ctx.mongo, post)
   ctx.body = result.ops[0]._id.toString()
 })
+.get('/pagination', async ctx => {
+  ctx.body = {
+    pageSize: config.pageSize,
+    total: await postService.getTotalCount(ctx.mongo)
+  }
+})
 .get('/:id', async (ctx, next) => {
   ctx.body = await postService.get(ctx.mongo, ctx.params.id)
 })
 .put('/:id', utils.LoginMiddleware, async (ctx, next) => {
-  const post = Object.assign({ updatetime: Date.now() }, ctx.request.body)
+  const post = Object.assign({
+    public: false,
+    updatetime: Date.now()
+  }, ctx.request.body)
   delete post._id
   ctx.body = await postService.update(ctx.mongo, ctx.params.id, post)
 })

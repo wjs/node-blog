@@ -5,6 +5,11 @@
       <el-input type="text" placeholder="Title" v-model="post.title"></el-input>
     </div>
     <div class="tools">
+      <el-switch
+        v-model="post.public"
+        on-text="公开"
+        off-text="私密">
+      </el-switch>
       <el-button type="primary" @click="openImagePanel">图片管理</el-button>
       <el-button type="primary" @click="save">Save</el-button>
     </div>
@@ -32,12 +37,13 @@
   import {
     Input,
     Button,
-    Upload
+    Switch,
+    Message
   } from 'element-ui'
   import ImagePanel from './ImagePanel.vue'
   Vue.component(Input.name, Input)
   Vue.component(Button.name, Button)
-  Vue.component(Upload.name, Upload)
+  Vue.component(Switch.name, Switch)
 
   marked.setOptions({
     langPrefix: 'hljs ',
@@ -64,11 +70,12 @@
       }
     },
     beforeRouteLeave (to, from, next) {
-      if (confirm(`确认要离开？`)) {
-        next()
-      } else {
-        return false
-      }
+      // if (confirm(`确认要离开？`)) {
+      //   next()
+      // } else {
+      //   return false
+      // }
+      next()
     },
     methods: {
       getDetail (id) {
@@ -84,13 +91,15 @@
           this.$http.put(`/api/posts/${this.post._id}`, this.post)
           .then(res => res.body)
           .then(res => {
-            this.$router.push({ name: 'dashboard' })
+            // this.$router.push({ name: 'dashboard' })
+            Message({ message: '保存成功！', type: 'success'})
           })
         } else {
           this.$http.post('/api/posts', this.post)
           .then(res => res.body)
           .then(res => {
-            this.$router.push({ name: 'dashboard' })
+            // this.$router.push({ name: 'dashboard' })
+            Message({ message: '保存成功！', type: 'success'})
           })
         }
       },

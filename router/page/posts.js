@@ -34,6 +34,7 @@ posts
     return ctx.redirect('/')
   }
   const posts = await postService.getList(ctx.mongo, {
+    public: true,
     pageIndex: currentPage
   })
   posts.data.forEach(item => {
@@ -60,7 +61,7 @@ posts
 .get('/pagination', async ctx => {
   ctx.body = {
     pageSize: config.pageSize,
-    total: await postService.getTotalCount(ctx.mongo)
+    total: await postService.getTotalCount(ctx.mongo, { public: true })
   }
 })
 .get('/:id', async ctx => {
