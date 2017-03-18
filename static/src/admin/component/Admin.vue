@@ -1,19 +1,19 @@
 <template>
   <div class="admin-layout">
     <div class="left">
-      <el-menu default-active="1" class="left-nav">
+      <el-menu theme="dark" :default-active="activeRouter" class="left-nav">
         <router-link :to="{ name: 'dashboard'}">
-          <el-menu-item index="1">
+          <el-menu-item index="dashboard">
             <i class="el-icon-menu"></i>博客管理
           </el-menu-item>
         </router-link>
         <router-link :to="{ name: 'setting' }">
-          <el-menu-item index="2">
+          <el-menu-item index="setting">
             <i class="el-icon-setting"></i>站点设置
           </el-menu-item>
         </router-link>
-        <a href="/admin/logout">
-          <el-menu-item index="3">
+        <a href="/admin/logout" class="logout-btn">
+          <el-menu-item index="logout">
             <i class="el-icon-d-caret"></i>退出登录
           </el-menu-item>
         </a>
@@ -39,7 +39,12 @@
   Vue.component(MenuItem.name, MenuItem)
 
   export default {
-    name: 'Admin'
+    name: 'Admin',
+    data () {
+      return {
+        activeRouter: this.$router.currentRoute.name
+      }
+    }
   }
 </script>
 
@@ -62,10 +67,16 @@
   }
   .left-nav {
     height: 100%;
-    background-color: #eef1f6;
     a {
       text-decoration: none;
     }
+  }
+  .logout-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 100%;
   }
 
   .clearfix::after {
@@ -75,5 +86,8 @@
   }
   .f-r {
     float: right;
+  }
+  .text-center {
+    text-align: center;
   }
 </style>

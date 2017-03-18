@@ -10,7 +10,7 @@ const posts = {
     delete filter.pageIndex
     delete filter.pageSize
     const cursor = await mongoClient.db(config.mongodb.db).collection(collectionName)
-    .find(filter, { title: true, createtime: true })
+    .find(filter, { title: true, createtime: true, public: true })
     .sort({ createtime: -1 })
     .skip((pageIndex - 1) * pageSize)
     .limit(pageSize)

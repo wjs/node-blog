@@ -1,6 +1,6 @@
 # node-blog
 
-练手项目，Node.js 写的个人博客系统，后端 Koa2 + mongodb，博客首页 jQuery， 博客后台管理页 Vue + element。
+练手项目，Node.js 写的个人博客系统，后端 Koa2 + mongodb，博客后台管理页 Vue + element，使用 marked + highlight.js 实现 markdown 编辑展示和代码高亮。
 
 [Live Demo](https://wjs92.cf)
 
@@ -43,7 +43,7 @@ npm run build # 打包前端静态
 - [x] 博客后台管理功能：站点初始化，管理员登录，博客增删改查，站点和管理员信息管理
 - [ ] markdown 编辑器优化
 - [ ] 博客查找
-- [ ] 图片上传
+- [x] 图片上传
 - [ ] 个人信息展示
 - [x] 兼容手机端
 - [ ] 缓存

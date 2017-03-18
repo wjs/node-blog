@@ -38,10 +38,14 @@ posts
   if (ctx.query.pageSize) {
     pageSize = parseInt(ctx.query.pageSize)
   }
-  ctx.body =  await postService.getList(ctx.mongo, {
+  const result = await postService.getList(ctx.mongo, {
     pageIndex,
     pageSize
   })
+  result.data.forEach(item => {
+    item.createtime = moment(item.createtime).format('YYYY-MM-DD')
+  })
+  ctx.body = result
 })
 .post('/', utils.LoginMiddleware, async (ctx, next) => {
   const post = Object.assign({

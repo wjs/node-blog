@@ -6,28 +6,51 @@
         <el-button type="success" size="small">新增博客<i class="el-icon-edit el-icon--right"></i></el-button>
       </router-link>
     </h1>
+    <el-table
+      :data="posts"
+      style="width: 100%">
+      <el-table-column
+        prop="title"
+        label="标题">
+      </el-table-column>
+      <el-table-column
+        prop="createtime"
+        label="发布时间"
+        width="150px">
+      </el-table-column>
+      <el-table-column
+        prop="public"
+        label="类型"
+        width="100px">
+        <template scope="scope">
+          <p>{{scope.row.public ? '公开' : '私密' }}</p>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        width="150px"
+        class-name="operate">
+        <template scope="scope">
+          <a :href="`/posts/${scope.row._id}`" target="_blank">
+            <el-button type="text" size="small">预览</el-button>
+          </a>
+          <router-link :to="{ name: 'edit-post', params: { id: scope.row._id } }">
+            <el-button type="text" size="small">编辑</el-button>
+          </router-link>
+          <el-button type="text" size="small" @click="del(scope.row, scope.$index)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-    <div class="post-item" v-for="(item, index) in posts">
-      <div class="title"><a :href="`/posts/${item._id}`" target="_blank">{{item.title}}</a></div>
-      <div class="operate">
-        <router-link :to="{ name: 'edit-post', params: { id: item._id } }">
-          <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
-            <el-button type="primary" icon="edit"></el-button>
-          </el-tooltip>
-        </router-link>
-        <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-          <el-button type="primary" icon="delete" @click="del(item, index)"></el-button>
-        </el-tooltip>
-      </div>
+    <div style="margin: 20px 0; text-align: center">
+      <el-pagination
+        layout="prev, pager, next"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
+        :current-page="pagination.currentPage"
+        @current-change="pageChange">
+      </el-pagination>
     </div>
-
-    <el-pagination
-      layout="prev, pager, next"
-      :page-size="pagination.pageSize"
-      :total="pagination.total"
-      :current-page="pagination.currentPage"
-      @current-change="pageChange">
-    </el-pagination>
   </div>
 </template>
 
@@ -36,10 +59,14 @@
   import {
     Button,
     Tooltip,
+    Table,
+    TableColumn,
     Pagination
   } from 'element-ui'
   Vue.component(Button.name, Button)
   Vue.component(Tooltip.name, Tooltip)
+  Vue.component(Table.name, Table)
+  Vue.component(TableColumn.name, TableColumn)
   Vue.component(Pagination.name, Pagination)
 
   export default {
@@ -49,7 +76,7 @@
         posts: [],
         pagination: {
           currentPage: 1,
-          pageSize: 2
+          pageSize: 10
         }
       }
     },
@@ -96,36 +123,9 @@
 </script>
 
 <style lang="less">
-  .post-item {
-    display: flex;
-    padding: 10px 0;
-    border-bottom: 1px solid #f2f2f2;
-    transition-duration: 0.3s;
-    transition-timing-function: ease-in-out;
-
-    &:hover {
-      background-color: #f2f2f2;
-    }
-
-    .title {
-      flex: 1;
-      font-size: 1.2em;
-      line-height: 1.8;
-
-      a {
-        text-decoration: none;
-        color: #333;
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-    .operate {
-      text-align: center;
-
-      button {
-        margin-left: 20px;
-      }
+  .operate {
+    a {
+      margin-right: 10px;
     }
   }
 </style>
