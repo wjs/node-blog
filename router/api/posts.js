@@ -1,3 +1,4 @@
+const _ = require("lodash")
 const mongo = require('koa-mongo')
 const multer = require('koa-multer')
 const fs = require('fs')
@@ -27,6 +28,19 @@ const upload = multer({
     }
   })
 })
+
+const walkSync = (dir, fileList = []) => {
+  fs.readdirSync(dir).forEach(file => {
+    const filePath = path.join(dir, file)
+
+    fileList.push(
+      fs.statSync(filePath).isDirectory()
+        ? { dir: file, children: walkSync(filePath) }
+        : file
+    )
+  })
+  return fileList
+}
 
 posts
 .get('/', async (ctx, next) => {
@@ -94,6 +108,9 @@ posts
     await fs.renameSync(oldFileName, newFileName)
   }
   ctx.body = `/static/${now.year()}/${now.month() + 1}/${ctx.req.file.filename}`
+})
+.get('/upload-img/list', async ctx => {
+  ctx.body = await walkSync(path.resolve(config.uploadImagePath))
 })
 
 module.exports = posts

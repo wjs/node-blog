@@ -1,6 +1,6 @@
 <template>
   <div class="post">
-    <image-panel ref="imagePanel" :show="showImagePanel"></image-panel>
+    <image-panel ref="imagePanel"></image-panel>
     <div>
       <el-input type="text" placeholder="Title" v-model="post.title"></el-input>
     </div>
@@ -87,7 +87,6 @@
           tags: []
         },
         postPreview: '',
-        showImagePanel: false,
         tagInputVisible: false,
         tagInputValue: ''
       }

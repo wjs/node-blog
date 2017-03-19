@@ -8,6 +8,7 @@ const utils = require('../../common/utils')
 const siteService = require('../../service/site')
 
 admin
+// 初始化站点表单提交
 .post('/init/save-site', async ctx => {
   const site = await siteService.get(ctx.mongo)
   if (site) {
@@ -35,6 +36,7 @@ admin
     ctx.redirect('/admin/login')
   }
 })
+// 初始化站点页面
 .get('/init', async ctx => {
   let site = await siteService.get(ctx.mongo)
   if (site) {
@@ -51,6 +53,7 @@ admin
     }
   })
 })
+// 登录页面
 .get('/login', async ctx => {
   const site = await siteService.get(ctx.mongo)
   if (!site) {
@@ -71,6 +74,7 @@ admin
     })
   }
 })
+// 登录表单提交
 .post('/login', async ctx => {
   const loginSuccess = await utils.login(ctx, ctx.request.body.username, ctx.request.body.password)
   if (loginSuccess) {
@@ -79,10 +83,12 @@ admin
     ctx.redirect('/admin/login')
   }
 })
+// 登出
 .get('/logout', async ctx => {
   ctx.cookies.set(config.cookieAuthKey, null)
   ctx.redirect('/admin/login')
 })
+// 默认 admin 模板
 .get('*', utils.LoginMiddleware, async (ctx, next) => {
   const site = await siteService.get(ctx.mongo)
   if (!site) {

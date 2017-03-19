@@ -2,7 +2,6 @@
   <transition name="slide">
     <div class="image-panel" v-show="show">
       图片管理
-      <span class="f-r" @click="show = false">关闭</span>
 
       <el-upload
         class="upload-demo"
@@ -13,6 +12,22 @@
         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
 
+      <el-collapse v-model="openYear">
+        <el-collapse-item :title="year.dir" :name="year.dir" :key="year.dir" v-for="year in images">
+          <div class="month-section" :key="month.dir" v-for="month in year.children">
+            <div>{{month.dir}}</div>
+            <div class="clearfix">
+              <div class="img-box" :key="img" v-for="img in month.children">
+                <img :src="`/static/${year.dir}/${month.dir}/${img}`" alt="">
+              </div>
+            </div>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+
+      <div class="close-bar" @click="show = false">
+        <i class="el-icon-arrow-up"></i>
+      </div>
     </div>
   </transition>
 </template>
@@ -21,25 +36,43 @@
   import Vue from 'vue'
   import {
     Button,
-    Upload
+    Upload,
+    Collapse,
+    CollapseItem
   } from 'element-ui'
   Vue.component(Button.name, Button)
   Vue.component(Upload.name, Upload)
+  Vue.component(Collapse.name, Collapse)
+  Vue.component(CollapseItem.name, CollapseItem)
 
   export default {
     name: 'ImagePanel',
     data () {
       return {
         show: false,
-        images: []
+        images: [],
+        openYear: '1'
       }
     },
     created () {
       this.$on('toggleShow', function () {
         this.show = !this.show
       })
+
+      this.getUploadedImage()
     },
     methods: {
+      getUploadedImage () {
+        this.$http.get('/api/posts/upload-img/list')
+        .then(res => res.body)
+        .then(res => {
+          this.images = res
+          console.log(this.images)
+          if (this.images[0]) {
+            this.openYear = this.images[0].dir
+          }
+        })
+      },
       uploadImgSuccess (res) {
         // 把返回的图片 url 直接插到 markdown 中
         // 默认加到后面，想放在其他地方需要手动移，后面查一下 textarea 光标位置
@@ -88,14 +121,38 @@
   .slide-leave-to {
     animation: slideUp .25s forwards;
   }
+
+  @imagePanelHeight: 300px;
   .image-panel {
     position: fixed;
     width: 100%;
-    height: 300px;
+    height: @imagePanelHeight;
+    overflow: auto;
     top: 0;
     left: 0;
+    padding-bottom: 30px;
+    box-sizing: border-box;
+    background-color: #fff;
+    z-index: 999;
+  }
+  .img-box {
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin: 0 10px 10px 0;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .close-bar {
+    position: fixed;
+    left: 0;
+    top: @imagePanelHeight;
+    width: 100%;
+    text-align: center;
+    background-color: #eee;
     box-shadow: 0px 1px 3px 0 rgba(0,0,0,0.25);
-    background-color: #f2f2f2;
     z-index: 999;
   }
 </style>
