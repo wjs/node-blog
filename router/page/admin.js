@@ -56,7 +56,6 @@ admin
   if (!site) {
     return ctx.redirect('/admin/init')
   }
-  console.log(site)
 
   const isLogined = await utils.isLogin(ctx)
   if (isLogined) {

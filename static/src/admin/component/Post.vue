@@ -10,6 +10,26 @@
         on-text="公开"
         off-text="私密">
       </el-switch>
+      <el-tag
+        :key="tag"
+        v-for="tag in post.tags"
+        :closable="true"
+        :close-transition="false"
+        @close="handleTagClose(tag)"
+      >
+      {{tag}}
+      </el-tag>
+      <el-input
+        class="input-new-tag"
+        v-if="tagInputVisible"
+        v-model="tagInputValue"
+        ref="saveTagInput"
+        size="mini"
+        @keyup.enter.native="handleTagInputConfirm"
+        @blur="handleTagInputConfirm"
+      >
+      </el-input>
+      <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ New Tag</el-button>
       <el-button type="primary" @click="openImagePanel">图片管理</el-button>
       <el-button type="primary" @click="save">Save</el-button>
     </div>
@@ -19,7 +39,8 @@
           type="textarea"
           placeholder="Markdown content..."
           v-model="post.content"
-          @change="contentChange">
+          @change="contentChange"
+          @keydown.native="keydownSave">
         </el-input>
       </div>
       <div class="flex1">
@@ -38,12 +59,14 @@
     Input,
     Button,
     Switch,
+    Tag,
     Message
   } from 'element-ui'
   import ImagePanel from './ImagePanel.vue'
   Vue.component(Input.name, Input)
   Vue.component(Button.name, Button)
   Vue.component(Switch.name, Switch)
+  Vue.component(Tag.name, Tag)
 
   marked.setOptions({
     langPrefix: 'hljs ',
@@ -59,9 +82,14 @@
     },
     data () {
       return {
-        post: {},
+        post: {
+          public: false,
+          tags: []
+        },
         postPreview: '',
-        showImagePanel: false
+        showImagePanel: false,
+        tagInputVisible: false,
+        tagInputValue: ''
       }
     },
     mounted () {
@@ -85,6 +113,13 @@
           this.post = res
           this.preview()
         })
+      },
+      // cmd + s or ctrl + s to save
+      keydownSave (e) {
+        if ((e.metaKey || e.ctrlKey) && e.keyCode === 83) {
+          e.preventDefault()
+          this.save()
+        }
       },
       save () {
         if (this.$route.params.id) {
@@ -111,6 +146,22 @@
       },
       openImagePanel () {
         this.$refs.imagePanel.$emit('toggleShow')
+      },
+      handleTagClose (tag) {
+        this.post.tags.splice(this.post.tags.indexOf(tag), 1);
+      },
+      showTagInput () {
+        this.tagInputVisible = true
+        this.$nextTick(_ => {
+          this.$refs.saveTagInput.$refs.input.focus()
+        })
+      },
+      handleTagInputConfirm () {
+        if (this.tagInputValue) {
+          this.post.tags.push(this.tagInputValue)
+        }
+        this.tagInputVisible = false
+        this.tagInputValue = ''
       }
     }
   }
@@ -153,6 +204,23 @@
     }
     pre {
       max-width: 500px;
+    }
+    .el-tag {
+      margin-left: 10px;
+    }
+    .button-new-tag {
+      margin-left: 10px;
+      height: 24px;
+      line-height: 22px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .input-new-tag {
+      display: inline-block;
+      width: 77px;
+      height: 24px;
+      line-height: 22px;
+      margin: 0 10px;
     }
   }
 </style>

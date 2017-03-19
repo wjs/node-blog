@@ -50,6 +50,7 @@ posts
 .post('/', utils.LoginMiddleware, async (ctx, next) => {
   const post = Object.assign({
     public: false,
+    tags: [],
     createtime: Date.now(),
     updatetime: Date.now()
   }, ctx.request.body)
@@ -67,6 +68,7 @@ posts
 .put('/:id', utils.LoginMiddleware, async (ctx, next) => {
   const post = Object.assign({
     public: false,
+    tags: [],
     updatetime: Date.now()
   }, ctx.request.body)
   delete post._id
