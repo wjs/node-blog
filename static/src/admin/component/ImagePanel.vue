@@ -1,26 +1,20 @@
 <template>
   <transition name="slide">
     <div class="image-panel" v-show="show">
-      图片管理
-
-      <!--
-      <el-upload
-        class="upload-demo"
-        action="/api/posts/upload-img"
-        :multiple="false"
-        :on-success="uploadImgSuccess">
-        <el-button size="small" type="primary">点击上传</el-button>
-        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-      </el-upload>
-      -->
-      <vue-core-image-upload
-        crop-ratio="4:3"
-        :class="['pure-button','pure-button-primary','js-btn-crop']"
-        :crop="true"
-        url="/api/posts/upload-img"
-        extensions="png,gif,jpeg,jpg"
-        v-on:imageuploaded="uploadImgSuccess">
-      </vue-core-image-upload>
+      <div class="upload-box">
+        截图比例
+        <el-input-number v-model="cropW" :min="1"></el-input-number>
+        :
+        <el-input-number v-model="cropH" :min="1"></el-input-number>
+        <vue-core-image-upload
+          :crop-ratio="`${this.cropW}:${this.cropH}`"
+          class="el-button el-button--primary crop-btn"
+          :crop="true"
+          url="/api/posts/upload-img"
+          extensions="png,jpeg,jpg"
+          v-on:imageuploaded="uploadImgSuccess">
+        </vue-core-image-upload>
+      </div>
 
       <el-collapse v-model="openYear">
         <el-collapse-item :title="year.dir" :name="year.dir" :key="year.dir" v-for="year in images">
@@ -52,13 +46,13 @@
   import VueCoreImageUpload  from 'vue-core-image-upload'
   import {
     Button,
-    Upload,
+    InputNumber,
     Collapse,
     CollapseItem,
     Message
   } from 'element-ui'
   Vue.component(Button.name, Button)
-  Vue.component(Upload.name, Upload)
+  Vue.component(InputNumber.name, InputNumber)
   Vue.component(Collapse.name, Collapse)
   Vue.component(CollapseItem.name, CollapseItem)
 
@@ -70,8 +64,15 @@
     data () {
       return {
         show: false,
+        cropW: 1,
+        cropH: 1,
         images: [],
         openYear: '1'
+      }
+    },
+    computed: {
+      cropRatio () {
+        return this.cropW + ':' + this.cropH
       }
     },
     created () {
@@ -168,6 +169,21 @@
     box-sizing: border-box;
     background-color: #fff;
     z-index: 999;
+
+    .upload-box {
+      padding: 20px 0;
+    }
+    .el-input-number {
+      width: 120px;
+      vertical-align: middle;
+    }
+    .crop-btn {
+      margin-left: 20px;
+      vertical-align: middle;
+    }
+    .el-collapse-item__header {
+      background-color: #eff2f7;
+    }
   }
   .img-box {
     float: left;

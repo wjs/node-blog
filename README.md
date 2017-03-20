@@ -13,9 +13,11 @@
 - pm2 （可以使用 forever 等代替）
 
 ```bash
+# 安装 imagemagick，下面是 ubuntu 的安装命令，不通版本的服务器自行查找安装方式
+sudp apt-get update && sudo apt-get install imagemagick
 git clone https://github.com/wjs/node-blog.git
 cd node-blog
-npm i --production
+npm i --production  # 前端静态已经编译好上传了，这里只需要安装后台相关的包
 cp config/sample.js config/index.js
 vi config/index.js  # 修改对应配置项
 pm2 start app.js -i max

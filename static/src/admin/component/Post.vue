@@ -201,7 +201,7 @@
       border-left: 1px solid #bfcbd9;
       box-sizing: border-box;
     }
-    pre {
+    pre, img {
       max-width: 500px;
     }
     .el-tag {
