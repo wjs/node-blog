@@ -16,6 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "ejs": "^2.5.6",
+    "gm": "^1.23.0",
     "highlight.js": "^9.10.0",
     "koa": "^2.0.1",
     "koa-bodyparser": "^4.0.0",
@@ -38,6 +39,7 @@
     "babel-preset-env": "^1.2.0",
     "babel-preset-stage-2": "^6.22.0",
     "clean-webpack-plugin": "^0.1.15",
+    "clipboard": "^1.6.1",
     "css-loader": "^0.26.2",
     "element-ui": "^1.2.3",
     "extract-text-webpack-plugin": "^2.0.0",
@@ -49,6 +51,7 @@
     "progress-bar-webpack-plugin": "^1.9.3",
     "style-loader": "^0.13.2",
     "vue": "^2.2.1",
+    "vue-core-image-upload": "^2.0.10",
     "vue-loader": "^11.1.4",
     "vue-resource": "^1.2.1",
     "vue-router": "^2.3.0",

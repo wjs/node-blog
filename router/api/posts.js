@@ -1,6 +1,7 @@
 const _ = require("lodash")
 const mongo = require('koa-mongo')
 const multer = require('koa-multer')
+const gm = require('gm').subClass({imageMagick: true})
 const fs = require('fs')
 const path = require('path')
 const mkdirp = require('mkdirp')
@@ -91,7 +92,7 @@ posts
 .del('/:id', utils.LoginMiddleware, async (ctx, next) => {
   ctx.body = await postService.del(ctx.mongo, ctx.params.id)
 })
-.post('/upload-img', upload.single('file'), async ctx => {
+.post('/upload-img', upload.single('files'), async ctx => {
   // 这里可能会坑，multer 把结果挂到了 req 上，而不是 request
   // issue 见：https://github.com/koa-modules/multer/issues/14
   const now = moment()
@@ -106,8 +107,31 @@ posts
     const oldFileName = path.resolve(ctx.req.file.path)
     const newFileName = `${dirPath}/${ctx.req.file.filename}`
     await fs.renameSync(oldFileName, newFileName)
+    // http://aheckmann.github.io/gm/docs.html#crop
+    // gm("img.png").crop(width, height, x, y)
+    const gmCropPromise = new Promise(function (resolve, reject) {
+      gm(newFileName).crop(ctx.req.body.toCropImgW, ctx.req.body.toCropImgH, ctx.req.body.toCropImgX, ctx.req.body.toCropImgY)
+      .write(newFileName, function (err) {
+        if (err) {
+          console.log(err)
+          reject(err)
+        }
+        resolve()
+      })
+    })
+    // 因为 gm 的 write 方法是异步的，在这里 await 一下，前端得到的才是截取过的图片
+    await gmCropPromise.then(res => {}).catch(err => {})
   }
   ctx.body = `/static/${now.year()}/${now.month() + 1}/${ctx.req.file.filename}`
+})
+.del('/upload-img/*', async ctx => {
+  try {
+    await fs.unlinkSync(path.resolve(config.uploadImagePath, ctx.params[0]))
+    ctx.body = 'ok'
+  } catch (e) {
+    console.log(e)
+    ctx.body = 'failed'
+  }
 })
 .get('/upload-img/list', async ctx => {
   ctx.body = await walkSync(path.resolve(config.uploadImagePath))

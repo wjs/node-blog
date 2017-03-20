@@ -1,6 +1,6 @@
 # node-blog
 
-练手项目，Node.js 写的个人博客系统，后端 Koa2 + mongodb，博客后台管理页 Vue + element，使用 marked + highlight.js 实现 markdown 编辑展示和代码高亮。
+练手项目，Node.js 写的个人博客系统，后端 Koa2 + mongodb，博客后台管理页 Vue + [element](https://github.com/ElemeFE/element)，使用 [marked](https://github.com/chjj/marked) + [highlight.js](https://github.com/isagalaev/highlight.js) 实现 markdown 编辑展示和代码高亮，使用 [vue-core-image-upload](https://github.com/Vanthink-UED/vue-core-image-upload) + [gm](https://github.com/aheckmann/gm) 实现图片的截取与上传。
 
 [Live Demo](https://wjs92.cf)
 

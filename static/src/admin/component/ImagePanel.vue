@@ -3,6 +3,7 @@
     <div class="image-panel" v-show="show">
       图片管理
 
+      <!--
       <el-upload
         class="upload-demo"
         action="/api/posts/upload-img"
@@ -11,6 +12,15 @@
         <el-button size="small" type="primary">点击上传</el-button>
         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
+      -->
+      <vue-core-image-upload
+        crop-ratio="4:3"
+        :class="['pure-button','pure-button-primary','js-btn-crop']"
+        :crop="true"
+        url="/api/posts/upload-img"
+        extensions="png,gif,jpeg,jpg"
+        v-on:imageuploaded="uploadImgSuccess">
+      </vue-core-image-upload>
 
       <el-collapse v-model="openYear">
         <el-collapse-item :title="year.dir" :name="year.dir" :key="year.dir" v-for="year in images">
@@ -19,6 +29,10 @@
             <div class="clearfix">
               <div class="img-box" :key="img" v-for="img in month.children">
                 <img :src="`/static/${year.dir}/${month.dir}/${img}`" alt="">
+                <div class="tool-box">
+                  <i class="el-icon-delete2" @click="deleteImg(`${year.dir}/${month.dir}/${img}`)"></i>
+                  <i class="el-icon-document f-r copy-btn" :data-clipboard-text="`![](/static/${year.dir}/${month.dir}/${img})`"></i>
+                </div>
               </div>
             </div>
           </div>
@@ -34,11 +48,14 @@
 
 <script>
   import Vue from 'vue'
+  import Clipboard from 'clipboard'
+  import VueCoreImageUpload  from 'vue-core-image-upload'
   import {
     Button,
     Upload,
     Collapse,
-    CollapseItem
+    CollapseItem,
+    Message
   } from 'element-ui'
   Vue.component(Button.name, Button)
   Vue.component(Upload.name, Upload)
@@ -47,6 +64,9 @@
 
   export default {
     name: 'ImagePanel',
+    components: {
+      VueCoreImageUpload
+    },
     data () {
       return {
         show: false,
@@ -67,16 +87,30 @@
         .then(res => res.body)
         .then(res => {
           this.images = res
-          console.log(this.images)
           if (this.images[0]) {
             this.openYear = this.images[0].dir
           }
+          this.$nextTick(() => {
+            const clipboard = new Clipboard('.copy-btn')
+            clipboard.on('success', e => {
+              Message({ message: '图片 Markdown 格式已复制到剪贴板！', type: 'info'})
+              this.show = false
+            })
+          })
         })
       },
       uploadImgSuccess (res) {
         // 把返回的图片 url 直接插到 markdown 中
         // 默认加到后面，想放在其他地方需要手动移，后面查一下 textarea 光标位置
         // this.post.content += `![test img](${res})`
+        this.getUploadedImage()
+      },
+      deleteImg (file) {
+        this.$http.delete(`/api/posts/upload-img/${file}`)
+        .then(res => res.body)
+        .then(res => {
+          this.getUploadedImage()
+        })
       }
     }
   }
@@ -137,12 +171,36 @@
   }
   .img-box {
     float: left;
+    position: relative;
     width: 100px;
     height: 100px;
     margin: 0 10px 10px 0;
     img {
       width: 100%;
       height: 100%;
+    }
+    &:hover {
+      .tool-box {
+        display: block;
+      }
+    }
+    .tool-box {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 30px;
+      padding: 5px 10px;
+      box-sizing: border-box;
+      background-color: rgba(0, 0, 0, .4);
+      i {
+        cursor: pointer;
+        font-size: 1.5em;
+        color: #fff;
+        &:hover {
+          color: #20a0ff;
+        }
+      }
     }
   }
   .close-bar {
