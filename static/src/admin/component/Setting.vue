@@ -17,6 +17,7 @@
       <label>github 用户名</label>
       <el-input type="text" placeholder="github 用户名" v-model="site.github"></el-input>
     </div>
+    <friend-links :links="site.links" :add-link="addLink"></friend-links>
     <div class="row">
       <el-button type="primary" @click="updateSite" :loading="loading">
         保存{{loading ? '中...' : '更改'}}
@@ -33,12 +34,16 @@
     Button,
     Message
   } from 'element-ui'
+  import FriendLinks from './FriendLinks.vue'
   Vue.component(Input.name, Input)
   Vue.component(InputNumber.name, InputNumber)
   Vue.component(Button.name, Button)
 
   export default {
     name: 'Setting',
+    components: {
+      FriendLinks
+    },
     data () {
       return {
         site: {},
@@ -57,12 +62,13 @@
         })
       },
       updateSite () {
-        const { sitename, pagesize, admin, github } = this.site
+        const { sitename, pagesize, admin, github, links } = this.site
         const params = {
           sitename,
           pagesize,
           admin,
-          github
+          github,
+          links
         }
 
         this.loading = true
@@ -74,6 +80,9 @@
         .finally(() => {
           this.loading = false
         })
+      },
+      addLink (link) {
+        this.site.links.push(link)
       }
     }
   }

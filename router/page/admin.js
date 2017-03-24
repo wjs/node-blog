@@ -21,7 +21,8 @@ admin
     pagesize: 10,
     admin: 'admin',
     password: 'admin',
-    github: ''
+    github: '',
+    links: []
   }, ctx.request.body)
   // encry password
   newSite.password = utils.encryPassword(newSite.password)

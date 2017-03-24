@@ -28,6 +28,8 @@ app.use(bodyParser())
 // page
 const postPages = require('./router/page/posts')
 app.use(postPages.routes())
+const linkPages = require('./router/page/links')
+app.use(linkPages.routes())
 // 后面的路由需要管理员登录，这里加个中间件拿管理员信息
 const adminPages = require('./router/page/admin')
 app.use(adminPages.routes())
