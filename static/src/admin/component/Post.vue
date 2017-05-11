@@ -121,7 +121,7 @@
         }
       },
       save () {
-        if (this.$route.params.id) {
+        if (this.post._id) {
           this.$http.put(`/api/posts/${this.post._id}`, this.post)
           .then(res => res.body)
           .then(res => {
@@ -132,6 +132,7 @@
           this.$http.post('/api/posts', this.post)
           .then(res => res.body)
           .then(res => {
+            this.post = Object.assign({}, this.post, { _id: res })
             // this.$router.push({ name: 'dashboard' })
             Message({ message: '保存成功！', type: 'success'})
           })
