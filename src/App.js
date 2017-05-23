@@ -7,7 +7,12 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-
+        <Router>
+          <Switch>
+            <Route path="/" component={} />
+            <Route render={() => <Redirect to="/" />} />
+          </Switch>
+        </Router>
       </Provider>
     );
   }
